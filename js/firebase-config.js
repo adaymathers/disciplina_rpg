@@ -1,5 +1,3 @@
-// firebase-config.js
-
 const firebaseConfig = {
   apiKey: "AIzaSyAOrzixfRctN7SsTs78Rgu231kUZo-fhBI",
   authDomain: "disciplinarpg.firebaseapp.com",
@@ -11,7 +9,4 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
-// Inicializa Firestore y Auth
 const db = firebase.firestore();
-const auth = firebase.auth();
