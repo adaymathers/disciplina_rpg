@@ -3,194 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <title>Disciplina RPG con Firebase</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    #app {
-      margin-top: 20px;
-    }
-    select, input, button {
-      font-size: 16px;
-      margin: 5px 0;
-    }
-    ul {
-      max-height: 200px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
 
 <h1>Disciplina RPG con Firebase</h1>
 
-<label for="username">Nombre de usuario:</label>
-<input type="text" id="username" placeholder="Tu nombre" />
-<button onclick="login()">Entrar</button>
-
-<div id="app" style="display:none;">
-  <div>Créditos: <span id="creditos">0</span></div>
-  <div>XP: <span id="xpActual">0</span> / <span id="xpNecesario">100</span></div>
-  <div>Nivel: <span id="nivel">1</span></div>
-  <select id="actividad">
-    <option value="fuerza">Ejercicio físico (+30 XP / +10 créditos)</option>
-    <option value="inteligencia">Inglés (+25 XP / +10 créditos)</option>
-    <option value="sabiduria">Programación (+30 XP / +10 créditos)</option>
-    <option value="lenguaje">Chino mandarín (+15 XP / +5 créditos)</option>
-    <option value="carisma">Videojuegos (-20 créditos / +10 XP)</option>
-  </select>
-  <button onclick="registrarActividad()">Registrar</button>
-
-  <h3>Estadísticas</h3>
-  <div>Fuerza: <span id="fuerza">1</span></div>
-  <div>Inteligencia: <span id="inteligencia">1</span></div>
-  <div>Sabiduría: <span id="sabiduria">1</span></div>
-  <div>Lenguaje: <span id="lenguaje">1</span></div>
-  <div>Carisma: <span id="carisma">1</span></div>
-
-  <h3>Registro de actividades</h3>
-  <ul id="logList"></ul>
+<div id="login-container">
+  <label for="username">Nombre de usuario:</label>
+  <input type="text" id="username" placeholder="Tu nombre" />
+  <button id="btnLogin">Entrar</button>
 </div>
 
-<!-- Firebase SDK (versión compat para HTML simple) -->
+<div id="app" style="display:none;">
+
+  <section id="misiones-container">
+    <h3>Misión diaria</h3>
+    <div id="misionDiaria"></div>
+    <button id="btnCompletarMision">Completar misión</button>
+  </section>
+
+  <section id="actividad-container">
+    <label for="actividad">Selecciona actividad:</label>
+    <select id="actividad">
+      <option value="fuerza">Ejercicio físico (+30 XP / +10 créditos)</option>
+      <option value="inteligencia">Inglés (+25 XP / +10 créditos)</option>
+      <option value="sabiduria">Programación (+30 XP / +10 créditos)</option>
+      <option value="lenguaje">Chino mandarín (+15 XP / +5 créditos)</option>
+      <option value="carisma">Videojuegos (-20 créditos / +10 XP)</option>
+    </select>
+    <button id="btnRegistrarActividad">Registrar</button>
+  </section>
+
+  <section id="stats-container">
+    <h3>Estadísticas</h3>
+    <div>Créditos: <span id="creditos">0</span></div>
+    <div>XP: <span id="xpActual">0</span> / <span id="xpNecesario">100</span></div>
+    <div>Nivel: <span id="nivel">1</span></div>
+    <div>Fuerza: <span id="fuerza">1</span></div>
+    <div>Inteligencia: <span id="inteligencia">1</span></div>
+    <div>Sabiduría: <span id="sabiduria">1</span></div>
+    <div>Lenguaje: <span id="lenguaje">1</span></div>
+    <div>Carisma: <span id="carisma">1</span></div>
+  </section>
+
+  <section id="log-container">
+    <h3>Registro de actividades</h3>
+    <ul id="logList"></ul>
+  </section>
+
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-<script>
-  // Tu configuración real de Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyAOrzixfRctN7SsTs78Rgu231kUZo-fhBI",
-    authDomain: "disciplinarpg.firebaseapp.com",
-    projectId: "disciplinarpg",
-    storageBucket: "disciplinarpg.firebasestorage.app",
-    messagingSenderId: "801491516724",
-    appId: "1:801491516724:web:9ea005048fdfbbd0a9f961",
-    measurementId: "G-8LV83NEQS6"
-  };
-
-  // Inicializar Firebase (compat)
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  let userDoc = null;
-  let userId = null;
-
-  const actividades = {
-    fuerza: { xp: 30, creditos: 10 },
-    inteligencia: { xp: 25, creditos: 10 },
-    sabiduria: { xp: 30, creditos: 10 },
-    lenguaje: { xp: 15, creditos: 5 },
-    carisma: { xp: 10, creditos: -20 }
-  };
-
-  async function login() {
-    userId = document.getElementById("username").value.trim();
-    if (!userId) {
-      alert("Pon un nombre de usuario");
-      return;
-    }
-    userDoc = db.collection("usuarios").doc(userId);
-    const doc = await userDoc.get();
-    if (!doc.exists) {
-      // Crear usuario nuevo
-      await userDoc.set({
-        xp: 0,
-        nivel: 1,
-        xpNecesario: 100,
-        creditos: 0,
-        stats: { fuerza:1, inteligencia:1, sabiduria:1, lenguaje:1, carisma:1 },
-        log: []
-      });
-    }
-    cargarDatos();
-    document.getElementById("app").style.display = "block";
-    document.getElementById("username").style.display = "none";
-    // Ocultar el botón Entrar
-    event.target.style.display = "none";
-  }
-
-  async function cargarDatos() {
-    const doc = await userDoc.get();
-    if (!doc.exists) return;
-    const data = doc.data();
-
-    document.getElementById("creditos").textContent = data.creditos;
-    document.getElementById("xpActual").textContent = data.xp;
-    document.getElementById("xpNecesario").textContent = data.xpNecesario;
-    document.getElementById("nivel").textContent = data.nivel;
-
-    for (let stat in data.stats) {
-      document.getElementById(stat).textContent = data.stats[stat];
-    }
-
-    // Cargar log
-    const logList = document.getElementById("logList");
-    logList.innerHTML = "";
-    data.log.slice().reverse().forEach(item => {
-      const li = document.createElement("li");
-      li.textContent = item;
-      logList.appendChild(li);
-    });
-  }
-
-  async function registrarActividad() {
-    if (!userDoc) return alert("Primero inicia sesión");
-
-    const seleccion = document.getElementById("actividad").value;
-    const actividad = actividades[seleccion];
-
-    // Obtener datos actuales
-    const doc = await userDoc.get();
-    let data = doc.data();
-
-    // Validar créditos para videojuegos
-    if (seleccion === "carisma" && data.creditos < 20) {
-      alert("No tienes suficientes créditos para jugar videojuegos.");
-      return;
-    }
-
-    let xp = data.xp + actividad.xp;
-    let creditos = data.creditos + actividad.creditos;
-    if (creditos < 0) creditos = 0;
-
-    // Aumentar stats
-    let stats = {...data.stats};
-    stats[seleccion]++;
-
-    // Subir de nivel
-    let nivel = data.nivel;
-    let xpNecesario = data.xpNecesario;
-    while (xp >= xpNecesario) {
-      xp -= xpNecesario;
-      nivel++;
-      xpNecesario = Math.floor(xpNecesario * 1.2);
-    }
-
-    // Actualizar log
-    const ahora = new Date().toLocaleTimeString();
-    const signo = actividad.creditos >= 0 ? "+" : "";
-    const nuevaEntrada = `${ahora} — ${seleccion.toUpperCase()} (+${actividad.xp} XP, ${signo}${actividad.creditos} créditos)`;
-
-    let log = data.log || [];
-    log.push(nuevaEntrada);
-    if (log.length > 30) log.shift(); // limitar a últimas 30 entradas
-
-    // Guardar todo en Firestore
-    await userDoc.set({
-      xp,
-      nivel,
-      xpNecesario,
-      creditos,
-      stats,
-      log
-    });
-
-    cargarDatos();
-  }
-</script>
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/misiones.js"></script>
+<script src="js/actividades.js"></script>
+<script src="js/ui.js"></script>
 
 </body>
 </html>
