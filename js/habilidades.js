@@ -1,8 +1,7 @@
 // js/habilidades.js
 
 const habilidades = [
-  { id: "html", nombre: "HTML Básico", xp: 100, x: 60, y: 180 },
-  { id: "css", nombre: "CSS Neón", xp: 150, x: 160, y: 80 },
+  { id: "html", nombre: "HTML Básico", xp: 100, x: 60, y: 180 },  { id: "css", nombre: "CSS Neón", xp: 150, x: 160, y: 80 },
   { id: "firebase", nombre: "Firebase RPG", xp: 250, x: 260, y: 180 },
   { id: "portafolio", nombre: "Portafolio Público", xp: 400, x: 360, y: 80 }
 ];
@@ -67,3 +66,7 @@ function renderizarArbolDeHabilidades(xpActual) {
     svg.insertBefore(line, svg.firstChild);
   });
 }
+
+window.cerrarArbol = function () {
+  document.getElementById("contenedorHabilidades").style.display = "none";
+};
