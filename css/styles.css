@@ -15,11 +15,9 @@ body {
   color: #00ffea;
   padding: 20px;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
 }
 
+/* ===== Títulos ===== */
 h1, h3 {
   font-family: 'Orbitron', sans-serif;
   text-align: center;
@@ -57,6 +55,7 @@ h1, h3 {
   font-size: 16px;
   font-family: 'Share Tech Mono', monospace;
   transition: border-color 0.3s ease;
+  max-width: 100%;
 }
 
 #login-container input[type="text"]:focus {
@@ -76,8 +75,10 @@ h1, h3 {
   text-shadow: 0 0 5px #ff00de;
   transition: background-color 0.3s ease;
   border: none;
+  max-width: 100%;
 }
 
+/* Hover efecto */
 #login-container button:hover {
   background: #00ffe9;
   color: #121212;
@@ -104,6 +105,7 @@ label {
   text-shadow: 0 0 3px #00fff7;
 }
 
+/* Inputs y selects */
 input[type="text"],
 select {
   width: 100%;
@@ -116,6 +118,7 @@ select {
   font-size: 16px;
   font-family: 'Share Tech Mono', monospace;
   transition: border-color 0.3s ease;
+  max-width: 100%;
 }
 
 input[type="text"]:focus,
@@ -125,6 +128,7 @@ select:focus {
   box-shadow: 0 0 8px #00ffe9;
 }
 
+/* Botones generales */
 button {
   background: #ff00de;
   border: none;
@@ -138,6 +142,7 @@ button {
   transition: background 0.3s ease, color 0.3s ease;
   text-shadow: 0 0 4px #ff00de;
   margin-bottom: 20px;
+  max-width: 100%;
 }
 
 button:hover {
@@ -150,6 +155,7 @@ section {
   margin-bottom: 30px;
 }
 
+/* Stats */
 #stats-container div,
 #creditos, #xpActual, #xpNecesario, #nivel {
   margin: 6px 0;
@@ -159,6 +165,7 @@ section {
   text-shadow: 0 0 3px #00ffea;
 }
 
+/* ===== Log list ===== */
 #logList {
   max-height: 180px;
   overflow-y: auto;
@@ -230,17 +237,27 @@ section {
   }
 }
 
-/* ===== Responsivo ===== */
+/* ===== MEDIA QUERIES ===== */
+
+/* Móviles pequeños */
 @media (max-width: 480px) {
   body {
     padding: 10px;
   }
 
-  #app, #login-container {
+  #app,
+  #login-container {
     padding: 15px;
     max-width: 100%;
+    margin: 20px auto;
   }
 
+  h1, h3 {
+    font-size: 20px;
+  }
+
+  input[type="text"],
+  select,
   button {
     font-size: 14px;
     padding: 10px;
@@ -252,7 +269,26 @@ section {
   }
 
   #logList {
-    max-height: 140px;
+    max-height: 130px;
     font-size: 13px;
+  }
+}
+
+/* Tablets o pantallas medianas */
+@media (max-width: 768px) {
+  #app,
+  #login-container {
+    margin: 20px auto;
+    padding: 20px;
+  }
+
+  h1, h3 {
+    font-size: 22px;
+  }
+
+  input[type="text"],
+  select,
+  button {
+    font-size: 15px;
   }
 }
