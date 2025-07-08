@@ -1,8 +1,5 @@
-async function cargarDatos() {
-  if (!userDoc) return;
-
+async function cargarDatosUsuario() {
   const doc = await userDoc.get();
-  if (!doc.exists) return;
   const data = doc.data();
 
   document.getElementById("creditos").textContent = data.creditos;
@@ -16,7 +13,7 @@ async function cargarDatos() {
 
   const logList = document.getElementById("logList");
   logList.innerHTML = "";
-  data.log.slice().reverse().forEach(item => {
+  (data.log || []).slice().reverse().forEach(item => {
     const li = document.createElement("li");
     li.textContent = item;
     logList.appendChild(li);
