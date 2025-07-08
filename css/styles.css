@@ -237,6 +237,38 @@ section {
   }
 }
 
+#contenedorHabilidades {
+  background: rgba(15, 10, 30, 0.9);
+  border: 2px solid #ff00de;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 25px #ff00de;
+  animation: fadeIn 0.4s ease;
+}
+
+#contenedorHabilidades h3 {
+  color: #00ffe9;
+  text-shadow: 0 0 4px #00ffe9;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#contenedorHabilidades button {
+  margin-top: 10px;
+  background: #ff00de;
+  border: none;
+  color: #0a0a1a;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 /* ===== MEDIA QUERIES ===== */
 
 /* Móviles pequeños */
