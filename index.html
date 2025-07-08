@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Disciplina RPG</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #00ffcc;
+    }
+
+    .atributos, .registro {
+      margin-bottom: 20px;
+    }
+
+    .atributo {
+      margin-bottom: 10px;
+    }
+
+    select, button {
+      padding: 10px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button {
+      background: #00ffcc;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .nivel, .creditos {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .xp-bar {
+      background: #444;
+      height: 20px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .xp-fill {
+      background: #00ffcc;
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .log {
+      background: #222;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .creditos {
+      font-size: 1.2em;
+      color: #ffd700;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Disciplina RPG</h1>
+
+  <div class="creditos">Créditos: <span id="creditos">0</span></div>
+
+  <div class="atributos">
+    <h2>Estadísticas</h2>
+    <div class="atributo">Fuerza 💪: <span id="fuerza">1</span></div>
+    <div class="atributo">Inteligencia 🧠: <span id="inteligencia">1</span></div>
+    <div class="atributo">Sabiduría 💻: <span id="sabiduria">1</span></div>
+    <div class="atributo">Lenguaje 🈸: <span id="lenguaje">1</span></div>
+    <div class="atributo">Carisma 🎮: <span id="carisma">1</span></div>
+  </div>
+
+  <div class="registro">
+    <h2>Registrar Actividad</h2>
+    <select id="actividad">
+      <option value="fuerza">Ejercicio físico (+30 XP / +10 créditos)</option>
+      <option value="inteligencia">Inglés (+25 XP / +10 créditos)</option>
+      <option value="sabiduria">Programación (+30 XP / +10 créditos)</option>
+      <option value="lenguaje">Chino mandarín (+15 XP / +5 créditos)</option>
+      <option value="carisma">Videojuegos (-20 créditos / +10 XP)</option>
+    </select>
+    <button onclick="registrarActividad()">Registrar</button>
+  </div>
+
+  <div class="nivel">
+    <h2>Nivel: <span id="nivel">1</span></h2>
+    <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+    <p><span id="xpActual">0</span> / <span id="xpNecesario">100</span> XP</p>
+  </div>
+
+  <div class="log">
+    <strong>Actividad reciente:</strong>
+    <ul id="logList"></ul>
+  </div>
+
+  <script>
+    // Cargar datos del almacenamiento local
+    let xp = parseInt(localStorage.getItem("xp")) || 0;
+    let nivel = parseInt(localStorage.getItem("nivel")) || 1;
+    let xpNecesario = parseInt(localStorage.getItem("xpNecesario")) || 100;
+    let creditos = parseInt(localStorage.getItem("creditos")) || 0;
+
+    const stats = JSON.parse(localStorage.getItem("stats")) || {
+      fuerza: 1,
+      inteligencia: 1,
+      sabiduria: 1,
+      lenguaje: 1,
+      carisma: 1
+    };
+
+    const actividades = {
+      fuerza: { xp: 30, creditos: 10 },
+      inteligencia: { xp: 25, creditos: 10 },
+      sabiduria: { xp: 30, creditos: 10 },
+      lenguaje: { xp: 15, creditos: 5 },
+      carisma: { xp: 10, creditos: -20 }
+    };
+
+    function registrarActividad() {
+      const seleccion = document.getElementById("actividad").value;
+      const actividad = actividades[seleccion];
+
+      // Validar créditos
+      if (seleccion === "carisma" && creditos < 20) {
+        alert("No tienes suficientes créditos para jugar videojuegos.");
+        return;
+      }
+
+      xp += actividad.xp;
+      creditos += actividad.creditos;
+      if (creditos < 0) creditos = 0;
+
+      stats[seleccion]++;
+      document.getElementById(seleccion).textContent = stats[seleccion];
+
+      while (xp >= xpNecesario) {
+        xp -= xpNecesario;
+        nivel++;
+        xpNecesario = Math.floor(xpNecesario * 1.2);
+      }
+
+      actualizarUI(seleccion, actividad);
+      guardarProgreso();
+    }
+
+    function actualizarUI(nombre, actividad) {
+      document.getElementById("nivel").textContent = nivel;
+      document.getElementById("xpActual").textContent = xp;
+      document.getElementById("xpNecesario").textContent = xpNecesario;
+      document.getElementById("creditos").textContent = creditos;
+
+      const porcentaje = (xp / xpNecesario) * 100;
+      document.getElementById("xpFill").style.width = `${porcentaje}%`;
+
+      const log = document.getElementById("logList");
+      const li = document.createElement("li");
+      const ahora = new Date().toLocaleTimeString();
+      const signo = actividad.creditos >= 0 ? "+" : "";
+      li.textContent = `${ahora} — ${nombre.toUpperCase()} (+${actividad.xp} XP, ${signo}${actividad.creditos} créditos)`;
+      log.prepend(li);
+    }
+
+    function guardarProgreso() {
+      localStorage.setItem("xp", xp);
+      localStorage.setItem("nivel", nivel);
+      localStorage.setItem("xpNecesario", xpNecesario);
+      localStorage.setItem("creditos", creditos);
+      localStorage.setItem("stats", JSON.stringify(stats));
+    }
+
+    // Al cargar la página, mostrar el progreso
+    window.onload = function () {
+      document.getElementById("nivel").textContent = nivel;
+      document.getElementById("xpActual").textContent = xp;
+      document.getElementById("xpNecesario").textContent = xpNecesario;
+      document.getElementById("creditos").textContent = creditos;
+
+      for (let key in stats) {
+        document.getElementById(key).textContent = stats[key];
+      }
+
+      const porcentaje = (xp / xpNecesario) * 100;
+      document.getElementById("xpFill").style.width = `${porcentaje}%`;
+    };
+  </script>
+
+</body>
+</html>
