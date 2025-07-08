@@ -1,4 +1,3 @@
-console.log("auth.js cargado");
 
 // Configuración Firebase (puedes mover esto a firebase-config.js si quieres)
 const firebaseConfig = {
