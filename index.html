@@ -1,205 +1,196 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Disciplina RPG</title>
+  <meta charset="UTF-8" />
+  <title>Disciplina RPG con Firebase</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #111;
-      color: #eee;
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
+      margin: 20px;
     }
-
-    h1, h2 {
-      text-align: center;
-      color: #00ffcc;
-    }
-
-    .atributos, .registro {
-      margin-bottom: 20px;
-    }
-
-    .atributo {
-      margin-bottom: 10px;
-    }
-
-    select, button {
-      padding: 10px;
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    button {
-      background: #00ffcc;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .nivel, .creditos {
-      text-align: center;
+    #app {
       margin-top: 20px;
     }
-
-    .xp-bar {
-      background: #444;
-      height: 20px;
-      border-radius: 5px;
-      overflow: hidden;
+    select, input, button {
+      font-size: 16px;
+      margin: 5px 0;
     }
-
-    .xp-fill {
-      background: #00ffcc;
-      height: 100%;
-      width: 0%;
-      transition: width 0.3s;
-    }
-
-    .log {
-      background: #222;
+    ul {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
       padding: 10px;
-      border-radius: 5px;
-      margin-top: 20px;
-    }
-
-    .creditos {
-      font-size: 1.2em;
-      color: #ffd700;
     }
   </style>
 </head>
 <body>
 
-  <h1>Disciplina RPG</h1>
+<h1>Disciplina RPG con Firebase</h1>
 
-  <div class="creditos">Créditos: <span id="creditos">0</span></div>
+<label for="username">Nombre de usuario:</label>
+<input type="text" id="username" placeholder="Tu nombre" />
+<button onclick="login()">Entrar</button>
 
-  <div class="atributos">
-    <h2>Estadísticas</h2>
-    <div class="atributo">Fuerza 💪: <span id="fuerza">1</span></div>
-    <div class="atributo">Inteligencia 🧠: <span id="inteligencia">1</span></div>
-    <div class="atributo">Sabiduría 💻: <span id="sabiduria">1</span></div>
-    <div class="atributo">Lenguaje 🈸: <span id="lenguaje">1</span></div>
-    <div class="atributo">Carisma 🎮: <span id="carisma">1</span></div>
-  </div>
+<div id="app" style="display:none;">
+  <div>Créditos: <span id="creditos">0</span></div>
+  <div>XP: <span id="xpActual">0</span> / <span id="xpNecesario">100</span></div>
+  <div>Nivel: <span id="nivel">1</span></div>
+  <select id="actividad">
+    <option value="fuerza">Ejercicio físico (+30 XP / +10 créditos)</option>
+    <option value="inteligencia">Inglés (+25 XP / +10 créditos)</option>
+    <option value="sabiduria">Programación (+30 XP / +10 créditos)</option>
+    <option value="lenguaje">Chino mandarín (+15 XP / +5 créditos)</option>
+    <option value="carisma">Videojuegos (-20 créditos / +10 XP)</option>
+  </select>
+  <button onclick="registrarActividad()">Registrar</button>
 
-  <div class="registro">
-    <h2>Registrar Actividad</h2>
-    <select id="actividad">
-      <option value="fuerza">Ejercicio físico (+30 XP / +10 créditos)</option>
-      <option value="inteligencia">Inglés (+25 XP / +10 créditos)</option>
-      <option value="sabiduria">Programación (+30 XP / +10 créditos)</option>
-      <option value="lenguaje">Chino mandarín (+15 XP / +5 créditos)</option>
-      <option value="carisma">Videojuegos (-20 créditos / +10 XP)</option>
-    </select>
-    <button onclick="registrarActividad()">Registrar</button>
-  </div>
+  <h3>Estadísticas</h3>
+  <div>Fuerza: <span id="fuerza">1</span></div>
+  <div>Inteligencia: <span id="inteligencia">1</span></div>
+  <div>Sabiduría: <span id="sabiduria">1</span></div>
+  <div>Lenguaje: <span id="lenguaje">1</span></div>
+  <div>Carisma: <span id="carisma">1</span></div>
 
-  <div class="nivel">
-    <h2>Nivel: <span id="nivel">1</span></h2>
-    <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
-    <p><span id="xpActual">0</span> / <span id="xpNecesario">100</span> XP</p>
-  </div>
+  <h3>Registro de actividades</h3>
+  <ul id="logList"></ul>
+</div>
 
-  <div class="log">
-    <strong>Actividad reciente:</strong>
-    <ul id="logList"></ul>
-  </div>
+<!-- Firebase SDK (versión compat para HTML simple) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-  <script>
-    // Cargar datos del almacenamiento local
-    let xp = parseInt(localStorage.getItem("xp")) || 0;
-    let nivel = parseInt(localStorage.getItem("nivel")) || 1;
-    let xpNecesario = parseInt(localStorage.getItem("xpNecesario")) || 100;
-    let creditos = parseInt(localStorage.getItem("creditos")) || 0;
+<script>
+  // Tu configuración real de Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyAOrzixfRctN7SsTs78Rgu231kUZo-fhBI",
+    authDomain: "disciplinarpg.firebaseapp.com",
+    projectId: "disciplinarpg",
+    storageBucket: "disciplinarpg.firebasestorage.app",
+    messagingSenderId: "801491516724",
+    appId: "1:801491516724:web:9ea005048fdfbbd0a9f961",
+    measurementId: "G-8LV83NEQS6"
+  };
 
-    const stats = JSON.parse(localStorage.getItem("stats")) || {
-      fuerza: 1,
-      inteligencia: 1,
-      sabiduria: 1,
-      lenguaje: 1,
-      carisma: 1
-    };
+  // Inicializar Firebase (compat)
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-    const actividades = {
-      fuerza: { xp: 30, creditos: 10 },
-      inteligencia: { xp: 25, creditos: 10 },
-      sabiduria: { xp: 30, creditos: 10 },
-      lenguaje: { xp: 15, creditos: 5 },
-      carisma: { xp: 10, creditos: -20 }
-    };
+  let userDoc = null;
+  let userId = null;
 
-    function registrarActividad() {
-      const seleccion = document.getElementById("actividad").value;
-      const actividad = actividades[seleccion];
+  const actividades = {
+    fuerza: { xp: 30, creditos: 10 },
+    inteligencia: { xp: 25, creditos: 10 },
+    sabiduria: { xp: 30, creditos: 10 },
+    lenguaje: { xp: 15, creditos: 5 },
+    carisma: { xp: 10, creditos: -20 }
+  };
 
-      // Validar créditos
-      if (seleccion === "carisma" && creditos < 20) {
-        alert("No tienes suficientes créditos para jugar videojuegos.");
-        return;
-      }
+  async function login() {
+    userId = document.getElementById("username").value.trim();
+    if (!userId) {
+      alert("Pon un nombre de usuario");
+      return;
+    }
+    userDoc = db.collection("usuarios").doc(userId);
+    const doc = await userDoc.get();
+    if (!doc.exists) {
+      // Crear usuario nuevo
+      await userDoc.set({
+        xp: 0,
+        nivel: 1,
+        xpNecesario: 100,
+        creditos: 0,
+        stats: { fuerza:1, inteligencia:1, sabiduria:1, lenguaje:1, carisma:1 },
+        log: []
+      });
+    }
+    cargarDatos();
+    document.getElementById("app").style.display = "block";
+    document.getElementById("username").style.display = "none";
+    // Ocultar el botón Entrar
+    event.target.style.display = "none";
+  }
 
-      xp += actividad.xp;
-      creditos += actividad.creditos;
-      if (creditos < 0) creditos = 0;
+  async function cargarDatos() {
+    const doc = await userDoc.get();
+    if (!doc.exists) return;
+    const data = doc.data();
 
-      stats[seleccion]++;
-      document.getElementById(seleccion).textContent = stats[seleccion];
+    document.getElementById("creditos").textContent = data.creditos;
+    document.getElementById("xpActual").textContent = data.xp;
+    document.getElementById("xpNecesario").textContent = data.xpNecesario;
+    document.getElementById("nivel").textContent = data.nivel;
 
-      while (xp >= xpNecesario) {
-        xp -= xpNecesario;
-        nivel++;
-        xpNecesario = Math.floor(xpNecesario * 1.2);
-      }
-
-      actualizarUI(seleccion, actividad);
-      guardarProgreso();
+    for (let stat in data.stats) {
+      document.getElementById(stat).textContent = data.stats[stat];
     }
 
-    function actualizarUI(nombre, actividad) {
-      document.getElementById("nivel").textContent = nivel;
-      document.getElementById("xpActual").textContent = xp;
-      document.getElementById("xpNecesario").textContent = xpNecesario;
-      document.getElementById("creditos").textContent = creditos;
-
-      const porcentaje = (xp / xpNecesario) * 100;
-      document.getElementById("xpFill").style.width = `${porcentaje}%`;
-
-      const log = document.getElementById("logList");
+    // Cargar log
+    const logList = document.getElementById("logList");
+    logList.innerHTML = "";
+    data.log.slice().reverse().forEach(item => {
       const li = document.createElement("li");
-      const ahora = new Date().toLocaleTimeString();
-      const signo = actividad.creditos >= 0 ? "+" : "";
-      li.textContent = `${ahora} — ${nombre.toUpperCase()} (+${actividad.xp} XP, ${signo}${actividad.creditos} créditos)`;
-      log.prepend(li);
+      li.textContent = item;
+      logList.appendChild(li);
+    });
+  }
+
+  async function registrarActividad() {
+    if (!userDoc) return alert("Primero inicia sesión");
+
+    const seleccion = document.getElementById("actividad").value;
+    const actividad = actividades[seleccion];
+
+    // Obtener datos actuales
+    const doc = await userDoc.get();
+    let data = doc.data();
+
+    // Validar créditos para videojuegos
+    if (seleccion === "carisma" && data.creditos < 20) {
+      alert("No tienes suficientes créditos para jugar videojuegos.");
+      return;
     }
 
-    function guardarProgreso() {
-      localStorage.setItem("xp", xp);
-      localStorage.setItem("nivel", nivel);
-      localStorage.setItem("xpNecesario", xpNecesario);
-      localStorage.setItem("creditos", creditos);
-      localStorage.setItem("stats", JSON.stringify(stats));
+    let xp = data.xp + actividad.xp;
+    let creditos = data.creditos + actividad.creditos;
+    if (creditos < 0) creditos = 0;
+
+    // Aumentar stats
+    let stats = {...data.stats};
+    stats[seleccion]++;
+
+    // Subir de nivel
+    let nivel = data.nivel;
+    let xpNecesario = data.xpNecesario;
+    while (xp >= xpNecesario) {
+      xp -= xpNecesario;
+      nivel++;
+      xpNecesario = Math.floor(xpNecesario * 1.2);
     }
 
-    // Al cargar la página, mostrar el progreso
-    window.onload = function () {
-      document.getElementById("nivel").textContent = nivel;
-      document.getElementById("xpActual").textContent = xp;
-      document.getElementById("xpNecesario").textContent = xpNecesario;
-      document.getElementById("creditos").textContent = creditos;
+    // Actualizar log
+    const ahora = new Date().toLocaleTimeString();
+    const signo = actividad.creditos >= 0 ? "+" : "";
+    const nuevaEntrada = `${ahora} — ${seleccion.toUpperCase()} (+${actividad.xp} XP, ${signo}${actividad.creditos} créditos)`;
 
-      for (let key in stats) {
-        document.getElementById(key).textContent = stats[key];
-      }
+    let log = data.log || [];
+    log.push(nuevaEntrada);
+    if (log.length > 30) log.shift(); // limitar a últimas 30 entradas
 
-      const porcentaje = (xp / xpNecesario) * 100;
-      document.getElementById("xpFill").style.width = `${porcentaje}%`;
-    };
-  </script>
+    // Guardar todo en Firestore
+    await userDoc.set({
+      xp,
+      nivel,
+      xpNecesario,
+      creditos,
+      stats,
+      log
+    });
+
+    cargarDatos();
+  }
+</script>
 
 </body>
 </html>
