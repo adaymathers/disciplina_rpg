@@ -50,5 +50,3 @@ async function loginConGoogle() {
     alert("Error al iniciar sesión. Intenta de nuevo.");
   }
 }
-
-}
