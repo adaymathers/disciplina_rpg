@@ -1,3 +1,5 @@
+console.log("auth.js cargado");
+
 let userDoc = null;
 let userId = null;
 
