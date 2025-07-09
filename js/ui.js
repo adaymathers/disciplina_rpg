@@ -39,7 +39,7 @@ document.getElementById("btnReiniciar").addEventListener("click", async () => {
   if (!username) return alert("No se encontró un usuario activo.");
 
   try {
-    // 🔥 1. Elimina todos los datos del usuario
+    // 1. Sobrescribimos los datos del usuario con el estado inicial
     await db.collection("usuarios").doc(username).set({
       creditos: 0,
       xp: 0,
@@ -53,16 +53,16 @@ document.getElementById("btnReiniciar").addEventListener("click", async () => {
       misionDiaria: null
     });
 
-    // 🧼 2. Limpia el localStorage
+    // 2. Borramos el localStorage y reiniciamos la vista
     localStorage.removeItem("username");
 
-    // 🧠 3. Resetea visualmente la interfaz
+    // 3. Reinicia visualmente
     document.getElementById("logList").innerHTML = "";
     document.getElementById("app").style.display = "none";
     document.getElementById("login-container").style.display = "block";
     document.getElementById("username").value = "";
 
-    alert("✅ Tu progreso ha sido borrado. ¡Comienza de nuevo!");
+    alert("✅ Tu progreso ha sido borrado. ¡Comienza desde cero!");
   } catch (error) {
     console.error("❌ Error al reiniciar el progreso:", error);
     alert("Hubo un error al reiniciar. Intenta de nuevo.");
