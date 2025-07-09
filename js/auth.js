@@ -24,6 +24,8 @@ async function login() {
   }
   document.getElementById("app").style.display = "block";
   document.getElementById("login-container").style.display = "none";
+  const nombreUsuario = document.getElementById("username").value.trim();
+localStorage.setItem("username", nombreUsuario);
 
   cargarDatos();
   cargarMisionDiaria();
