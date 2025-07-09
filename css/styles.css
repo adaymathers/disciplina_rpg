@@ -1,7 +1,7 @@
-/* styles-fallout.css */
+/* styles.css */
 
 /* ===== Fuentes y reset ===== */
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Share+Tech+Mono&display=swap');
 
 * {
   box-sizing: border-box;
@@ -11,30 +11,30 @@
 
 body {
   font-family: 'Share Tech Mono', monospace;
-  background: #1e1b16; /* tono oscuro terroso */
-  color: #a6d22e; /* verde fosforescente estilo terminal */
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: #ccff00; /* verde fosforescente amarillo */
   padding: 20px;
   min-height: 100vh;
 }
 
 /* ===== Títulos ===== */
 h1, h3 {
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Orbitron', sans-serif;
   text-align: center;
-  color: #f2c94c; /* amarillo mostaza */
-  text-shadow: 0 0 4px #f2c94c, 0 0 8px #b08815;
+  color: #dfff00; /* amarillo fosforescente */
+  text-shadow: 0 0 5px #dfff00, 0 0 10px #dfff00;
   margin-bottom: 15px;
 }
 
 /* ===== Login Container ===== */
 #login-container {
-  background: rgba(48, 42, 27, 0.95); /* fondo oscuro terroso */
-  border: 2px solid #f2c94c;
+  background: rgba(20, 20, 40, 0.95);
+  border: 2px solid #dfff00;
   border-radius: 14px;
   padding: 30px 25px;
   max-width: 400px;
   margin: 50px auto;
-  box-shadow: 0 0 15px #f2c94c, inset 0 0 20px #b08815;
+  box-shadow: 0 0 20px #dfff00, inset 0 0 30px #dfff00;
   text-align: center;
   width: 100%;
 }
@@ -49,9 +49,9 @@ h1, h3 {
 #login-container input[type="text"] {
   padding: 12px;
   border-radius: 8px;
-  border: 2px solid #f2c94c;
-  background: #2a271c;
-  color: #a6d22e;
+  border: 2px solid #dfff00;
+  background: #0a0a1a;
+  color: #ccff00;
   font-size: 16px;
   font-family: 'Share Tech Mono', monospace;
   transition: border-color 0.3s ease;
@@ -59,40 +59,41 @@ h1, h3 {
 }
 
 #login-container input[type="text"]:focus {
-  border-color: #a6d22e;
+  border-color: #ccff00;
   outline: none;
-  box-shadow: 0 0 8px #a6d22e;
+  box-shadow: 0 0 8px #ccff00;
 }
 
 #login-container button {
-  background: #f2c94c;
-  color: #1e1b16;
+  background: #dfff00;
+  color: #0a0a1a;
   font-weight: 700;
   font-size: 18px;
   padding: 14px 0;
   border-radius: 12px;
   cursor: pointer;
-  text-shadow: 0 0 4px #b08815;
+  text-shadow: 0 0 5px #dfff00;
   transition: background-color 0.3s ease;
   border: none;
   max-width: 100%;
 }
 
+/* Hover efecto */
 #login-container button:hover {
-  background: #a6d22e;
-  color: #2a271c;
-  box-shadow: 0 0 15px #a6d22e;
+  background: #ccff00;
+  color: #121212;
+  box-shadow: 0 0 15px #ccff00;
 }
 
 /* ===== App Container ===== */
 #app {
-  background: rgba(48, 42, 27, 0.85);
-  border: 2px solid #f2c94c;
+  background: rgba(20, 20, 40, 0.85);
+  border: 2px solid #dfff00;
   border-radius: 12px;
   padding: 25px;
   max-width: 450px;
   width: 100%;
-  box-shadow: 0 0 15px #f2c94c, 0 0 30px #b08815 inset;
+  box-shadow: 0 0 15px #dfff00, 0 0 30px #dfff00 inset;
   margin: 30px auto;
 }
 
@@ -100,8 +101,8 @@ label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #a6d22e;
-  text-shadow: 0 0 3px #a6d22e;
+  color: #dfff00;
+  text-shadow: 0 0 3px #dfff00;
 }
 
 /* Inputs y selects */
@@ -111,9 +112,9 @@ select {
   padding: 12px;
   margin-bottom: 15px;
   border-radius: 8px;
-  border: 2px solid #f2c94c;
-  background: #2a271c;
-  color: #a6d22e;
+  border: 2px solid #dfff00;
+  background: #0a0a1a;
+  color: #ccff00;
   font-size: 16px;
   font-family: 'Share Tech Mono', monospace;
   transition: border-color 0.3s ease;
@@ -122,16 +123,16 @@ select {
 
 input[type="text"]:focus,
 select:focus {
-  border-color: #a6d22e;
+  border-color: #ccff00;
   outline: none;
-  box-shadow: 0 0 8px #a6d22e;
+  box-shadow: 0 0 8px #ccff00;
 }
 
 /* Botones generales */
 button {
-  background: #f2c94c;
+  background: #dfff00;
   border: none;
-  color: #1e1b16;
+  color: #0a0a1a;
   font-weight: bold;
   padding: 12px 20px;
   border-radius: 10px;
@@ -139,15 +140,15 @@ button {
   font-size: 16px;
   width: 100%;
   transition: background 0.3s ease, color 0.3s ease;
-  text-shadow: 0 0 4px #b08815;
+  text-shadow: 0 0 4px #dfff00;
   margin-bottom: 20px;
   max-width: 100%;
 }
 
 button:hover {
-  background: #a6d22e;
-  color: #2a271c;
-  box-shadow: 0 0 10px #a6d22e;
+  background: #ccff00;
+  color: #1a1a2e;
+  box-shadow: 0 0 10px #ccff00;
 }
 
 section {
@@ -160,27 +161,27 @@ section {
   margin: 6px 0;
   font-size: 18px;
   font-weight: 600;
-  color: #a6d22e;
-  text-shadow: 0 0 3px #a6d22e;
+  color: #ccff00;
+  text-shadow: 0 0 3px #ccff00;
 }
 
 /* ===== Log list ===== */
 #logList {
   max-height: 180px;
   overflow-y: auto;
-  background: #2a271c;
-  border: 1.5px solid #f2c94c;
+  background: #0a0a1a;
+  border: 1.5px solid #dfff00;
   border-radius: 10px;
   padding: 12px;
   font-size: 14px;
   font-family: 'Share Tech Mono', monospace;
-  color: #a6d22e;
-  text-shadow: 0 0 2px #a6d22e;
+  color: #ccff00;
+  text-shadow: 0 0 2px #ccff00;
   list-style: none;
 }
 
 #logList li {
-  border-bottom: 1px solid #f2c94c;
+  border-bottom: 1px solid #dfff00;
   padding: 8px 0;
 }
 
@@ -191,7 +192,7 @@ section {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(30, 27, 22, 0.8);
+  background: rgba(15, 0, 50, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -207,61 +208,38 @@ section {
 }
 
 #alertModal .modal-content {
-  background: #3a3119;
-  border: 2px solid #f2c94c;
+  background: #1c0033;
+  border: 2px solid #dfff00;
   border-radius: 15px;
   padding: 25px 30px;
   max-width: 350px;
-  box-shadow: 0 0 20px #f2c94c;
-  color: #a6d22e;
+  box-shadow: 0 0 25px #dfff00;
+  color: #ccff00;
   font-family: 'Share Tech Mono', monospace;
   text-align: center;
-  animation: glowFallout 1.5s ease-in-out infinite alternate;
+  animation: neonGlow 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes glowFallout {
+@keyframes neonGlow {
   from {
     text-shadow:
-      0 0 5px #f2c94c,
-      0 0 10px #f2c94c,
-      0 0 20px #f2c94c,
-      0 0 40px #f2c94c;
+      0 0 5px #dfff00,
+      0 0 10px #dfff00,
+      0 0 20px #dfff00,
+      0 0 40px #dfff00;
   }
   to {
     text-shadow:
-      0 0 10px #f2c94c,
-      0 0 15px #f2c94c,
-      0 0 30px #f2c94c,
-      0 0 50px #f2c94c;
+      0 0 10px #dfff00,
+      0 0 15px #dfff00,
+      0 0 30px #dfff00,
+      0 0 50px #dfff00;
   }
-}
-
-#btnReiniciar {
-  background: #bb3b3b;
-  border: none;
-  color: white;
-  padding: 12px;
-  border-radius: 12px;
-  font-size: 16px;
-  margin-top: 10px;
-  text-shadow: 0 0 5px #8a1a1a;
-  box-shadow: 0 0 10px #8a1a1a;
-  cursor: pointer;
-  font-family: 'Share Tech Mono', monospace;
-}
-
-#btnReiniciar:hover {
-  background: #8a1a1a;
-  box-shadow: 0 0 20px #8a1a1a;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
 }
 
 /* ===== MEDIA QUERIES ===== */
 
+/* Móviles pequeños */
 @media (max-width: 480px) {
   body {
     padding: 10px;
@@ -296,6 +274,7 @@ section {
   }
 }
 
+/* Tablets o pantallas medianas */
 @media (max-width: 768px) {
   #app,
   #login-container {
@@ -313,4 +292,3 @@ section {
     font-size: 15px;
   }
 }
-
