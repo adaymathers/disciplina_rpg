@@ -5,17 +5,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const btnVerHab = document.getElementById("btnVerHabilidades");
   const btnReiniciar = document.getElementById("btnReiniciar");
 
-  if (btnVerHab) {
-    btnVerHab.addEventListener("click", () => {
-      document.getElementById("contenedorHabilidades").style.display = "block";
-      renderizarArbolDeHabilidades(xpActual);
-    });
-  }
-
-  window.cerrarArbol = function () {
-    document.getElementById("contenedorHabilidades").style.display = "none";
-  };
-
   if (btnReiniciar) {
     btnReiniciar.addEventListener("click", async () => {
       const confirmar = confirm("⚠️ Esto eliminará todo tu progreso. ¿Estás seguro?");
