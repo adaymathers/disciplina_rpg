@@ -236,33 +236,6 @@ section {
   }
 }
 
-#contenedorHabilidades {
-  background: rgba(48, 42, 27, 0.95);
-  border: 2px solid #f2c94c;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 0 25px #f2c94c;
-  animation: fadeIn 0.4s ease;
-}
-
-#contenedorHabilidades h3 {
-  color: #a6d22e;
-  text-shadow: 0 0 4px #a6d22e;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-#contenedorHabilidades button {
-  margin-top: 10px;
-  background: #f2c94c;
-  border: none;
-  color: #1e1b16;
-  padding: 10px;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
 #btnReiniciar {
   background: #bb3b3b;
   border: none;
