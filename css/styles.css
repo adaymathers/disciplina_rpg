@@ -264,6 +264,25 @@ section {
   cursor: pointer;
 }
 
+#btnReiniciar {
+  background: #ff4444;
+  border: none;
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 16px;
+  margin-top: 10px;
+  text-shadow: 0 0 5px #ff0000;
+  box-shadow: 0 0 10px #ff0000;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+}
+
+#btnReiniciar:hover {
+  background: #ff0000;
+  box-shadow: 0 0 20px #ff0000;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
